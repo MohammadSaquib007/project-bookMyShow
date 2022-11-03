@@ -1,7 +1,7 @@
 const isValid = function(value)
 {
     if(typeof value === null || typeof value === 'undefined') return false
-    if(typeof value === 'string' & value.trim().length === 0) return false
+    if(typeof value === 'string' && value.trim().length === 0) return false
     return true
 }
 
@@ -20,4 +20,8 @@ const validatePhone = function (phone) {
         return re.test(phone)
     }
 };
-module.exports={isValid,isValidRequestBody,validateEmail,validatePhone}
+const genderValidation = function (title){
+    return ['male', 'female', 'transgender'].indexOf(title.trim()) !== -1
+}
+
+module.exports={isValid,isValidRequestBody,validateEmail,validatePhone,genderValidation}

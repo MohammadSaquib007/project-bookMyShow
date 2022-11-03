@@ -5,6 +5,11 @@ const userSchema = new Schema({
     required: true,
     trim: true,
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
 
   phone: {
     type: Number,
@@ -12,20 +17,24 @@ const userSchema = new Schema({
     trim: true,
     unique: true,
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
+ 
+  password:{
+    type:String,
+    required:true,
   },
   gender: {
+    type:String,
     enum: ["male", "female", "transgender"],
+    required:"gender should be male,female,transgender"
   },
   wallet: {
     type: Number,
     default: 500,
   },
   role: {
+    type:String,
     enum: ["user", "admin"],
+    required:"role must be user or admin"
   },
 }, { timestamps: true });
 

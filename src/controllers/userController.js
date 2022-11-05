@@ -1,5 +1,8 @@
 const userModel = require('../models/userModel')
 const validator = require('../validator/validator')
+const jwt = require('jsonwebtoken')
+const { Auth } = require("two-step-auth");
+const e = require('express');
 const createUser = async function (req, res) {
     try {
         const requestBody = req.body;
@@ -23,9 +26,6 @@ const createUser = async function (req, res) {
             return
         }
 
-         // {email: email} object shorthand property
-
-
         if (!validator.isValid(password)) {
             return res.status(400).send({ status: false, msg: "plz provide password" })
         }
@@ -34,7 +34,7 @@ const createUser = async function (req, res) {
         }
         const isPhoneAlreadyExists = await userModel.findOne({ phone: phone })
         if (isPhoneAlreadyExists) {
-            return res.status(400).send({ status: false, msg: 'email already exists' })
+            return res.status(400).send({ status: false, msg: `${phone} phone already exists` })
         }
 
         if (!validator.validatePhone(phone)) {
@@ -59,4 +59,33 @@ const createUser = async function (req, res) {
         res.status(500).send({ status: false, msg: err.message });
     }
 };
-module.exports.createUser = createUser
+const login = async (req, res) => {
+    const requestBody = req.body
+    const { email, password } = requestBody
+    const user = await userModel.findOne(requestBody)
+    if (!user) {
+        return res.status(400).send({ status: false, msg: "user not found" })
+    }
+    console.log(user)
+    if (user) {
+        const wait = await Auth(email)
+        console.log(wait)
+        return res.send({ data: wait })
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+module.exports = { createUser, login }
